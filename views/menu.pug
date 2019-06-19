@@ -1,0 +1,19 @@
+extends base.pug
+
+block content
+  form.js-form.col-sm-6.offset-3(style="text-align : center;")
+    span.text-muted
+      strong Escoje una opción
+    .form-group
+      //label
+        strong Número:
+      //input.js-form-number.form-control(type="number")
+      a(href="/inicio/lab1")
+        button.btn.btn-primary.btn-block.mt-3(type="button", style="font-size:35px") Laboratorio 1
+      a(href="/inicio/lab2")
+        button.btn.btn-success.btn-block.mt-3(type="button", style="font-size:35px") Laboratorio 2
+      a(href="/inicio/lab3")
+        button.btn.btn-danger.btn-block.mt-3(type="button", style="font-size:35px") Laboratorio 3
+
+
+    

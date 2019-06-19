@@ -1,0 +1,59 @@
+extends base.pug
+
+block content
+  form.js-form.col-sm-8.offset-2(style="text-align : center;")
+    label
+      strong Lab1: Suma de un Vector
+    .form-group
+      label
+        strong Escriba su vector separado por comas (,):
+      input.js-form-vector.form-control(type="text")
+      button.btn.btn-primary.btn-block.mt-3(type="submit") Sumar Valores
+  div.js-form-resp.card.col-6.offset-3.display-1(style="padding : 35px; text-align : center; ") 0
+  a(href="/inicio")
+    button.btn.btn-danger.btn-block.mt-3.col-2(type="button") Volver
+
+
+block extra_js
+  script.
+    (function(){
+      var Module = {
+        Controls: {
+          form: document.querySelector('.js-form'),
+          input: document.querySelector('.js-form-vector'),
+          resp: document.querySelector('.js-form-resp'),
+        },
+        Handlers: {
+          onFormSubmit: function(event){
+            event.preventDefault();
+            $.ajax({
+              data: {
+                vector: Module.Controls.input.value
+              },
+              method: 'POST'
+            }).then(Module.Handlers.onFormSubmitSuccess)
+              .catch(Module.Handlers.onFormSubmitError);
+          },
+          onFormSubmitSuccess: function(resp){
+            console.log(resp.message);
+            if (resp.message != 'Error')
+            {
+              Module.Controls.resp.innerHTML = resp.message;
+              Module.Controls.resp.style.backgroundColor = "#4CAF50";
+            }else{
+              Module.Controls.resp.innerHTML = `<p style="font-size : 17px">Se ha ingresado dato no-numérico</p>`;
+              Module.Controls.resp.style.backgroundColor = "red";
+            }
+          },
+          onFormSubmitError: function(err){
+            console.log(err);
+          },
+        },
+        Methods:{
+          init: function(){
+            Module.Controls.form.addEventListener('submit', Module.Handlers.onFormSubmit)
+          }
+        }
+      }
+      Module.Methods.init();
+    })();

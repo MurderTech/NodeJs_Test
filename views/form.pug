@@ -1,0 +1,45 @@
+extends base.pug
+
+block content
+  form.js-form
+    span.text-muted Eleva al cuadrado el número dado
+    .form-group
+      label
+        strong Número:
+      input.js-form-number.form-control(type="number")
+      button.btn.btn-primary.btn-block.mt-3(type="submit") Calcular
+
+block extra_js
+  script.
+    (function(){
+      var Module = {
+        Controls: {
+          form: document.querySelector('.js-form'),
+          input: document.querySelector('.js-form-number'),
+        },
+        Handlers: {
+          onFormSubmit: function(event){
+            event.preventDefault();
+            $.ajax({
+              data: {
+                number: Module.Controls.input.value
+              },
+              method: 'POST'
+            }).then(Module.Handlers.onFormSubmitSuccess)
+              .catch(Module.Handlers.onFormSubmitError);
+          },
+          onFormSubmitSuccess: function(resp){
+            console.log(resp);
+          },
+          onFormSubmitError: function(err){
+            console.log(err);
+          },
+        },
+        Methods:{
+          init: function(){
+            Module.Controls.form.addEventListener('submit', Module.Handlers.onFormSubmit)
+          }
+        }
+      }
+      Module.Methods.init();
+    })();

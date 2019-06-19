@@ -1,0 +1,60 @@
+extends base.pug
+
+block content
+  form.js-form.col-sm-8.offset-2(style="text-align : center;")
+    label
+      strong Lab2: Matriz Random y Suma Diagonal
+    .form-group
+      label
+        strong Escriba un número:
+      input.js-form-vector.form-control(type="number", max=10, min=1)
+      button.btn.btn-primary.btn-block.mt-3(type="submit") Generar Matriz
+  div.js-form-resp.card.col-8.offset-2(style="padding : 35px; text-align : center; font-size: 15px")
+  br
+  div.js-form-resp1.card.col-4.offset-4.display-1(style="padding : 15px; text-align : center;") 0
+  a(href="/inicio")
+    button.btn.btn-danger.btn-block.mt-3.col-2(type="button") Volver
+
+
+block extra_js
+  script.
+    (function(){
+      var Module = {
+        Controls: {
+          form: document.querySelector('.js-form'),
+          input: document.querySelector('.js-form-vector'),
+          resp: document.querySelector('.js-form-resp'),
+          resp1: document.querySelector('.js-form-resp1'),
+        },
+        Handlers: {
+          onFormSubmit: function(event){
+            event.preventDefault();
+            $.ajax({
+              data: {
+                mnumber: Module.Controls.input.value
+              },
+              method: 'POST'
+            }).then(Module.Handlers.onFormSubmitSuccess)
+              .catch(Module.Handlers.onFormSubmitError);
+          },
+          onFormSubmitSuccess: function(resp){
+            console.log(resp.message);
+            var array = resp.message.split(',');
+
+            Module.Controls.resp.innerHTML = array[0];
+            Module.Controls.resp.style.backgroundColor = "#4CAF50";
+            Module.Controls.resp1.innerHTML = array[1];
+            Module.Controls.resp1.style.backgroundColor = "#FCA120";
+          },
+          onFormSubmitError: function(err){
+            console.log(err);
+          },
+        },
+        Methods:{
+          init: function(){
+            Module.Controls.form.addEventListener('submit', Module.Handlers.onFormSubmit)
+          }
+        }
+      }
+      Module.Methods.init();
+    })();
